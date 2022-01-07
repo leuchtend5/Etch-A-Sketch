@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="shortcut icon" href="#">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/334f53df79.js" crossorigin="anonymous"></script>
+  <script src="script.js" defer></script>
+  <title>Etch a sketch</title>
+</head>
+<body>
+  <div class="container">
+    <div class="tittle">Etch-a-sketch</div>
+    <div class="main">
+      <div class="menu">
+        <input id="color-picker" type="color" value="#333333">
+        <button id="color">Color Mode</button>
+        <button id="eraser">Eraser</button>
+        <button id="clear">Clear</button>
+        <button id="rainbow">Rainbow Mode</button>
+        <button id="darken">Darken Mode</button>
+        <div id="size-value"></div>
+        <input id="size" type="range" min="1" max="64" value="16">
+      </div>
+      <div id="content" class="content"></div>
+    </div>
+    <div class="footer">Copyright © 
+      <script>document.writeln(new Date().getFullYear())</script> 
+      Leuchtend
+      <a href="https://github.com/leuchtend5">
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+  </div>
+</body>
+</html>
