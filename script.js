@@ -25,6 +25,7 @@ function defaultValue(){
   currentSize = defaultSize;
 
   updateSize();
+  showPixel();
 }
 
 // text size information text
@@ -131,7 +132,6 @@ function darkenMode(){
   btnEraser.classList.remove('active');
 }
 
-showPixel();
 btnClear.addEventListener('click', clearGrid);
 btnColor.addEventListener('click', () => setCurrentMode("color"));
 btnEraser.addEventListener('click', () => setCurrentMode("eraser"));
