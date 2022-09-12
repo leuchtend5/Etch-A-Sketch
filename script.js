@@ -1,23 +1,23 @@
-const content = document.getElementById('content');
-const btnClear = document.getElementById('clear');
-const btnEraser = document.getElementById('eraser');
-const btnRainbow = document.getElementById('rainbow');
-const btnDarken = document.getElementById('darken');
-const btnSizeGrid = document.getElementById('size');
-const colorPicker = document.getElementById('color-picker');
-const btnColor = document.getElementById('color');
-const sizeValue = document.getElementById('size-value');
+const content = document.getElementById("content");
+const btnClear = document.getElementById("clear");
+const btnEraser = document.getElementById("eraser");
+const btnRainbow = document.getElementById("rainbow");
+const btnDarken = document.getElementById("darken");
+const btnSizeGrid = document.getElementById("size");
+const colorPicker = document.getElementById("color-picker");
+const btnColor = document.getElementById("color");
+const sizeValue = document.getElementById("size-value");
 
 const defaultSize = "16";
 const defaultColor = "#333333";
-const defaultMode = "color"
+const defaultMode = "color";
 
 let currentColor = defaultColor;
 let currentMode = defaultMode;
 let currentSize = defaultSize;
 
 // default value for first time load the page
-function defaultValue(){
+function defaultValue() {
   colorPicker.value = "#333333";
   btnSizeGrid.value = "16";
   currentColor = defaultColor;
@@ -29,60 +29,91 @@ function defaultValue(){
 }
 
 // text size information text
-function updateSize(){
+function updateSize() {
   sizeValue.textContent = `${btnSizeGrid.value} x ${btnSizeGrid.value}`;
 }
 
-function setCurrentSize(){
+function setCurrentSize() {
   currentSize = btnSizeGrid.value;
   clearGrid();
 }
 
 // to set the mode and show what mode is active
-function setCurrentMode(newMode){
+function setCurrentMode(newMode) {
   currentMode = newMode;
 
-  if(currentMode == "eraser"){
-    btnEraser.classList.add('active');
-    btnRainbow.classList.remove('active');
-    btnColor.classList.remove('active');
-    btnDarken.classList.remove('active');
-  } else if(currentMode == "color"){
-    btnColor.classList.add('active');
-    btnEraser.classList.remove('active');
-    btnRainbow.classList.remove('active');
-    btnDarken.classList.remove('active');
-  } else if(currentMode == "rainbow"){
-    btnRainbow.classList.add('active');
-    btnColor.classList.remove('active');
-    btnEraser.classList.remove('active');
-    btnDarken.classList.remove('active');
+  switch (currentMode) {
+    case "eraser":
+      btnEraser.classList.add("active");
+      btnRainbow.classList.remove("active");
+      btnColor.classList.remove("active");
+      btnDarken.classList.remove("active");
+      break;
+    case "color":
+      btnColor.classList.add("active");
+      btnEraser.classList.remove("active");
+      btnRainbow.classList.remove("active");
+      btnDarken.classList.remove("active");
+      break;
+    case "rainbow":
+      btnRainbow.classList.add("active");
+      btnColor.classList.remove("active");
+      btnEraser.classList.remove("active");
+      btnDarken.classList.remove("active");
+      break;
+    case "darken":
+      btnDarken.classList.add("active");
+      btnRainbow.classList.remove("active");
+      btnColor.classList.remove("active");
+      btnEraser.classList.remove("active");
+      break;
+    default:
+      return;
   }
 }
 
-function changeColor(e){
-  if(currentMode == "color"){
-    e.target.style.background = `${colorPicker.value}`;
-  }
-  else if(currentMode == "rainbow"){
-    const randomOne = Math.floor(Math.random()*256);
-    const randomTwo = Math.floor(Math.random()*256);
-    const randomThree = Math.floor(Math.random()*256);
-    e.target.style.background = `rgb(${randomOne}, ${randomTwo}, ${randomThree})`;
-  }
-  else if(currentMode == "eraser"){
-    e.target.style.background = "#ffffff";
+function changeColor() {
+  switch (currentMode) {
+    case "eraser":
+      this.style.background = "#ffffff";
+      this.style.opacity = 1;
+      this.classList.remove("darken");
+      break;
+    case "color":
+      this.style.background = `${colorPicker.value}`;
+      this.classList.remove("darken");
+      this.style.opacity = 1;
+      break;
+    case "rainbow":
+      const randomOne = Math.floor(Math.random() * 256);
+      const randomTwo = Math.floor(Math.random() * 256);
+      const randomThree = Math.floor(Math.random() * 256);
+      this.style.background = `rgb(${randomOne}, ${randomTwo}, ${randomThree})`;
+      this.style.opacity = 1;
+      this.classList.remove("darken");
+      break;
+    case "darken":
+      if (this.classList.contains("darken") && this.style.opacity <= 1) {
+        this.style.opacity = Number(this.style.opacity) + 0.1;
+      } else {
+        this.classList.add("darken");
+        this.style.opacity = 0.1;
+        this.style.background = `${colorPicker.value}`;
+      }
+      break;
+    default:
+      return;
   }
 }
 
 // to show the grid in the content
-function showPixel(){
+function showPixel() {
   content.style.gridTemplateColumns = `repeat(${currentSize}, 1fr)`;
   content.style.gridTemplateRows = `repeat(${currentSize}, 1fr)`;
 
   for (let i = 0; i <= currentSize * currentSize; i++) {
-    const divGrid = document.createElement('div');
-    divGrid.addEventListener('mouseover', changeColor);
+    const divGrid = document.createElement("div");
+    divGrid.addEventListener("mouseover", changeColor);
     content.appendChild(divGrid);
   }
 
@@ -97,46 +128,17 @@ function clearGrid() {
 
   showPixel();
 
-  btnRainbow.classList.remove('active');
-  btnColor.classList.remove('active');
-  btnEraser.classList.remove('active');
-  btnDarken.classList.remove('active');
+  btnRainbow.classList.remove("active");
+  btnColor.classList.remove("active");
+  btnEraser.classList.remove("active");
+  btnDarken.classList.remove("active");
 }
 
-function darkenMode(){
-  content.textContent = "";
-  colorPicker.value = "#000000"
-  content.style.gridTemplateColumns = `repeat(${currentSize}, 1fr)`;
-  content.style.gridTemplateRows = `repeat(${currentSize}, 1fr)`;
-
-  for(let i = 0; i <= currentSize * currentSize; i++){
-    const divGrid = document.createElement('div');
-    divGrid.addEventListener('mouseover', function(){
-     if(divGrid.classList.contains("darken")){
-       // to add the opacity + 0.1 when the element has class darken
-       divGrid.style.opacity = (Number(divGrid.style.opacity) + 0.1); 
-     } else{
-       divGrid.classList.add('darken');
-       divGrid.style.opacity = 0.1;
-       divGrid.style.background = `${colorPicker.value}`;
-     }
-    })
-    content.appendChild(divGrid);
-  }
-
-  updateSize();
-
-  btnDarken.classList.add('active');
-  btnRainbow.classList.remove('active');
-  btnColor.classList.remove('active');
-  btnEraser.classList.remove('active');
-}
-
-btnClear.addEventListener('click', clearGrid);
-btnColor.addEventListener('click', () => setCurrentMode("color"));
-btnEraser.addEventListener('click', () => setCurrentMode("eraser"));
-btnRainbow.addEventListener('click', () => setCurrentMode("rainbow"));
-btnSizeGrid.addEventListener('change', setCurrentSize);
-btnSizeGrid.addEventListener('mousemove', updateSize);
-btnDarken.addEventListener('click', darkenMode);
-window.addEventListener('load', defaultValue);
+btnClear.addEventListener("click", clearGrid);
+btnColor.addEventListener("click", () => setCurrentMode("color"));
+btnEraser.addEventListener("click", () => setCurrentMode("eraser"));
+btnRainbow.addEventListener("click", () => setCurrentMode("rainbow"));
+btnDarken.addEventListener("click", () => setCurrentMode("darken"));
+btnSizeGrid.addEventListener("change", setCurrentSize);
+btnSizeGrid.addEventListener("mousemove", updateSize);
+window.addEventListener("load", defaultValue);

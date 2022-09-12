@@ -93,7 +93,6 @@ button:hover {
   transform: rotate(360deg);
 }
 
-/* support the JS */
 button.active {
   color: #f3f2f2;
   background-color: #333333;
